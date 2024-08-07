@@ -26,8 +26,9 @@ jobs:
 
       - name: Export terminal environment variable and set limit of usage
         run: |
+          sudo apt install cpulimit
           export TERM=xterm
-          ulimit -Hm 1024
+          ulimit -m 1024
       
       - name: Clone repository
         run: git clone https://github.com/GataNina-Li/GataBot-MD
