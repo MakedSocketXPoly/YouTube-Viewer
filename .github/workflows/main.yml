@@ -23,37 +23,18 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-
-      - name: Export terminal environment variable and set limit of usage and net limit
-        run: |
-          sudo apt install cpulimit
-          export TERM=xterm
-          ulimit -m 1024
-          cpulimit --all -c 1 -v
-          sudo apt-get install iproute2
-          echo '#!/bin/bash' > network-limit.sh
-          echo 'IFACE=$(ip link show | awk '\''/state UP/ {print $2}'\'' | sed '\''s/:$//'\'')'  >> network-limit.sh
-          echo 'UPLOAD_LIMIT=5000  # 5 Mbit/s' >> network-limit.sh
-          echo 'DOWNLOAD_LIMIT=15000  # 15 Mbit/s' >> network-limit.sh
-          echo 'tc qdisc add dev $IFACE root tbf rate ${UPLOAD_LIMIT}kbit burst 640k latency 50ms' >> network-limit.sh
-          echo 'tc qdisc add dev $IFACE handle 1: root htb default 10' >> network-limit.sh
-          echo 'tc class add dev $IFACE parent 1: classid 1:10 htb rate ${DOWNLOAD_LIMIT}kbit' >> network-limit.sh
-          chmod +x network-limit.sh
-          sudo ./network-limit.sh &
-          IFACE=$(ip link show | awk '/state UP/ {print $2}' | sed 's/:$//')
-          sudo tc qdisc show dev $IFACE
       
       - name: Clone repository
-        run: git clone https://github.com/GataNina-Li/GataBot-MD
+        run: git clone https://github.com/Boudy1490/Nano_Bot
 
       - name: Install project dependencies
         run: |
-          cd GataBot-MD
+          cd Nano_Bot
           rm -rf package-lock.json && rm -rf node_modules && npm i
 
       - name: Start The Code
         run: |
-          cd GataBot-MD
+          cd Nano_Bot
           node . &
 
       - name: Keep workflow running
